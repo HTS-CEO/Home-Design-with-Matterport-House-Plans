@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fox Certified Contractors - House Style Selector</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .fcc-modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.8)}.fcc-modal-content{background-color:#f8f9fa;margin:5% auto;padding:20px;border-radius:8px;width:80%;max-width:900px;box-shadow:0 4px 20px rgba(0,0,0,0.15);position:relative}.fcc-close-modal{position:absolute;right:20px;top:10px;font-size:28px;font-weight:bold;cursor:pointer;color:#333}.wizard-step{display:none;padding:20px}.wizard-step.active{display:block}.wizard-question{font-size:1.2rem;margin-bottom:20px;color:#2c3e50}.wizard-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px}.wizard-option{border:2px solid #ddd;border-radius:8px;padding:15px;cursor:pointer;transition:all 0.3s;text-align:center}.wizard-option:hover{border-color:#3498db;transform:translateY(-3px)}.wizard-option.selected{border-color:#2ecc71;background-color:rgba(46,204,113,0.1)}.fcc-progress-container{width:100%;background-color:#e0e0e0;border-radius:4px;margin-top:20px}.fcc-progress-bar{height:8px;background-color:#3498db;border-radius:4px;width:0%;transition:width 0.3s}.fcc-hourglass{text-align:center;padding:10px;font-size:24px;color:#3498db}.fcc-gallery-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-top:20px}.gallery-item{border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:transform 0.3s}.gallery-item:hover{transform:scale(1.03)}.gallery-item iframe{width:100%;height:200px;border:none}.gallery-item-info{padding:15px;background:white}.fcc-primary-btn{background-color:#3498db;color:white;border:none;padding:12px 24px;border-radius:4px;cursor:pointer;font-size:1rem;transition:background-color 0.3s}.fcc-primary-btn:hover{background-color:#2980b9}.fcc-secondary-btn{background-color:#95a5a6;color:white;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-size:0.9rem;transition:background-color 0.3s}.fcc-secondary-btn:hover{background-color:#7f8c8d}.fcc-input-group{margin-bottom:20px}.fcc-input-group label{display:block;margin-bottom:8px;font-weight:bold}.fcc-input-group input{width:100%;padding:10px;border:1px solid #ddd;border-radius:4px;font-size:1rem}#propertyDataDisplay{margin:20px 0;padding:15px;background:#f0f0f0;border-radius:5px}#houseStyleSelectorBtn{margin:20px;padding:15px 30px;font-size:1.2rem;background:#e74c3c;color:white;border:none;border-radius:5px;cursor:pointer;transition:all 0.3s}#houseStyleSelectorBtn:hover{background:#c0392b;transform:translateY(-2px)}.furniture-planner{display:none;margin-top:20px}.furniture-controls{margin-bottom:15px}.floor-plan-container{position:relative;border:2px solid #333;margin:20px auto;background:#f9f9f9}.floor-plan-svg{width:100%;height:500px}.furniture-item{cursor:move}.dimension-line{stroke:#e74c3c;stroke-width:2}.dimension-text{font-size:12px;fill:#e74c3c}.estimate-details{margin-top:30px;padding:20px;background:#f8f9fa;border-radius:5px}.draw-schedule{margin-top:20px}.draw-stage{padding:10px;margin-bottom:10px;background:#ecf0f1;border-left:4px solid #3498db}.code-compliance{margin-top:20px;padding:15px;background:#fff8e1;border-left:4px solid #f39c12}
+    </style>
+</head>
+<body>
+    <button id="houseStyleSelectorBtn"><i class="fas fa-home"></i> Choose Your Dream Home Style</button>
+
+    <div id="houseStyleModal" class="fcc-modal">
+        <div class="fcc-modal-content">
+            <span class="fcc-close-modal">&times;</span>
+            <div id="wizardSteps"></div>
+            <div class="fcc-progress-container">
+                <div class="fcc-progress-bar"></div>
+                <div class="fcc-hourglass" id="loadingSpinner" style="display: none;">
+                    <i class="fas fa-hourglass-half fa-spin"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tourGalleryModal" class="fcc-modal">
+        <div class="fcc-modal-content">
+            <span class="fcc-close-modal">&times;</span>
+            <h2>Browse Home Styles</h2>
+            <div id="matterportGallery" class="fcc-gallery-container"></div>
+        </div>
+    </div>
+
+    <div id="propertyModal" class="fcc-modal">
+        <div class="fcc-modal-content">
+            <span class="fcc-close-modal">&times;</span>
+            <h2>Enter Your Property Details</h2>
+            <div id="propertyInputContainer">
+                <div class="fcc-input-group">
+                    <label for="propertyAddress">Property Address:</label>
+                    <input type="text" id="propertyAddress" placeholder="Enter your property address">
+                    <button id="fetchPropertyData" class="fcc-secondary-btn">Fetch Property Data</button>
+                </div>
+                <div class="fcc-input-group">
+                    <label>Or Upload Survey Plan:</label>
+                    <input type="file" id="surveyUpload" accept=".pdf,.jpg,.png">
+                </div>
+                <div id="propertyDataDisplay"></div>
+                <button id="confirmProperty" class="fcc-primary-btn" disabled>Confirm Property</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="resultsModal" class="fcc-modal">
+        <div class="fcc-modal-content" style="max-width: 1200px;">
+            <span class="fcc-close-modal">&times;</span>
+            <h2>Your Custom Home Plan</h2>
+            <div id="resultsContainer">
+                <div class="fcc-input-group">
+                    <h3>Selected Home: <span id="selectedHomeTitle"></span></h3>
+                    <div id="matterportEmbed"></div>
+                </div>
+                
+                <div class="furniture-planner">
+                    <h3>Furniture Planner</h3>
+                    <div class="furniture-controls">
+                        <button id="addSofa" class="fcc-secondary-btn"><i class="fas fa-couch"></i> Add Sofa</button>
+                        <button id="addBed" class="fcc-secondary-btn"><i class="fas fa-bed"></i> Add Bed</button>
+                        <button id="addTable" class="fcc-secondary-btn"><i class="fas fa-utensils"></i> Add Table</button>
+                        <button id="addChair" class="fcc-secondary-btn"><i class="fas fa-chair"></i> Add Chair</button>
+                        <button id="clearFurniture" class="fcc-secondary-btn"><i class="fas fa-trash"></i> Clear All</button>
+                    </div>
+                    <div class="floor-plan-container">
+                        <svg class="floor-plan-svg" id="floorPlanSvg"></svg>
+                    </div>
+                </div>
+                
+                <div class="estimate-details">
+                    <h3>Construction Estimate</h3>
+                    <div id="estimateDetails"></div>
+                    
+                    <div class="draw-schedule">
+                        <h4>5-Stage Draw Schedule</h4>
+                        <div class="draw-stage">
+                            <strong>Stage 1 (20%):</strong> Deposit and permit acquisition
+                        </div>
+                        <div class="draw-stage">
+                            <strong>Stage 2 (20%):</strong> Foundation and framing complete
+                        </div>
+                        <div class="draw-stage">
+                            <strong>Stage 3 (20%):</strong> Rough-ins (electrical, plumbing, HVAC)
+                        </div>
+                        <div class="draw-stage">
+                            <strong>Stage 4 (20%):</strong> Interior finishes and fixtures
+                        </div>
+                        <div class="draw-stage">
+                            <strong>Stage 5 (20%):</strong> Final inspection and completion
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-compliance">
+                    <h3>Florida Building Code Compliance</h3>
+                    <div id="codeCompliance"></div>
+                </div>
+                
+                <button id="downloadPlan" class="fcc-primary-btn"><i class="fas fa-download"></i> Download Plan & Estimate</button>
+                <button id="contactUs" class="fcc-primary-btn" style="background-color: #2ecc71;"><i class="fas fa-envelope"></i> Contact Us to Build This</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const matterportModels = [
+                {id:'m12345678901',title:'Modern Luxury Villa',style:'modern',bedrooms:4,bathrooms:3.5,sqft:3500,features:['open floor plan','large windows','minimalist design'],description:'Contemporary luxury with clean lines and expansive glass',priceEstimate:875000,lotSizeMin:10000,image:'https://example.com/modern-villa.jpg'},
+                {id:'m23456789012',title:'Traditional Colonial',style:'traditional',bedrooms:5,bathrooms:3,sqft:4200,features:['formal dining','wood floors','classic moldings'],description:'Timeless colonial with symmetrical facade and elegant interiors',priceEstimate:765000,lotSizeMin:12000,image:'https://example.com/colonial.jpg'},
+                {id:'m34567890123',title:'Rustic Farmhouse',style:'farmhouse',bedrooms:3,bathrooms:2,sqft:2800,features:['wrap-around porch','farmhouse sink','exposed beams'],description:'Charming farmhouse with modern amenities',priceEstimate:625000,lotSizeMin:15000,image:'https://example.com/farmhouse.jpg'},
+                {id:'m45678901234',title:'Coastal Contemporary',style:'contemporary',bedrooms:4,bathrooms:3,sqft:3200,features:['light-filled spaces','outdoor living','water views'],description:'Bright and airy coastal home with modern finishes',priceEstimate:925000,lotSizeMin:8000,image:'https://example.com/coastal.jpg'},
+                {id:'m56789012345',title:'Mediterranean Estate',style:'mediterranean',bedrooms:6,bathrooms:4.5,sqft:4800,features:['courtyard','tile roof','arched doorways'],description:'Luxurious Mediterranean-style villa with Old World charm',priceEstimate:1200000,lotSizeMin:20000,image:'https://example.com/mediterranean.jpg'},
+                {id:'m67890123456',title:'Modern Farmhouse',style:'farmhouse',bedrooms:4,bathrooms:2.5,sqft:3100,features:['black windows','shiplap','covered patio'],description:'Popular modern farmhouse with clean lines',priceEstimate:785000,lotSizeMin:10000,image:'https://example.com/mod-farmhouse.jpg'},
+                {id:'m78901234567',title:'Craftsman Bungalow',style:'craftsman',bedrooms:3,bathrooms:2,sqft:2200,features:['front porch','built-ins','natural materials'],description:'Classic craftsman with attention to detail',priceEstimate:550000,lotSizeMin:7500,image:'https://example.com/craftsman.jpg'}
+            ];
+
+            const wizardQuestions = [
+                {question:"What architectural style are you interested in?",key:"style",options:[
+                    {label:"Modern",value:"modern",icon:"fa-cube"},
+                    {label:"Traditional",value:"traditional",icon:"fa-home"},
+                    {label:"Farmhouse",value:"farmhouse",icon:"fa-tractor"},
+                    {label:"Contemporary",value:"contemporary",icon:"fa-building"},
+                    {label:"Mediterranean",value:"mediterranean",icon:"fa-umbrella-beach"},
+                    {label:"Craftsman",value:"craftsman",icon:"fa-hammer"}
+                ]},
+                {question:"How many bedrooms do you need?",key:"bedrooms",options:[
+                    {label:"2",value:2,icon:"fa-bed"},
+                    {label:"3",value:3,icon:"fa-bed"},
+                    {label:"4",value:4,icon:"fa-bed"},
+                    {label:"5+",value:5,icon:"fa-bed"}
+                ]},
+                {question:"How many bathrooms do you need?",key:"bathrooms",options:[
+                    {label:"2",value:2,icon:"fa-bath"},
+                    {label:"2.5",value:2.5,icon:"fa-bath"},
+                    {label:"3",value:3,icon:"fa-bath"},
+                    {label:"3.5+",value:3.5,icon:"fa-bath"}
+                ]},
+                {question:"What's your approximate budget?",key:"budget",options:[
+                    {label:"$500k-$750k",value:750000,icon:"fa-dollar-sign"},
+                    {label:"$750k-$1M",value:1000000,icon:"fa-dollar-sign"},
+                    {label:"$1M-$1.5M",value:1500000,icon:"fa-dollar-sign"},
+                    {label:"$1.5M+",value:2000000,icon:"fa-dollar-sign"}
+                ]},
+                {question:"What special features are important?",key:"features",multiSelect:true,options:[
+                    {label:"Open Floor Plan",value:"open floor plan",icon:"fa-vector-square"},
+                    {label:"Outdoor Living",value:"outdoor living",icon:"fa-tree"},
+                    {label:"Home Office",value:"home office",icon:"fa-laptop-house"},
+                    {label:"Gourmet Kitchen",value:"gourmet kitchen",icon:"fa-utensils"},
+                    {label:"Master Suite",value:"master suite",icon:"fa-bed"},
+                    {label:"Energy Efficient",value:"energy efficient",icon:"fa-solar-panel"}
+                ]}
+            ];
+
+            let userSelections = {};
+            let currentStep = 0;
+            let selectedModels = [];
+            let propertyData = {};
+            let selectedHome = null;
+            let furnitureItems = [];
+            let isDragging = false;
+            let draggedItem = null;
+            let offsetX, offsetY;
+
+            const modal = document.getElementById('houseStyleModal');
+            const galleryModal = document.getElementById('tourGalleryModal');
+            const propertyModal = document.getElementById('propertyModal');
+            const resultsModal = document.getElementById('resultsModal');
+            const btn = document.getElementById('houseStyleSelectorBtn');
+            const wizardSteps = document.getElementById('wizardSteps');
+            const progressBar = document.querySelector('.fcc-progress-bar');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const matterportGallery = document.getElementById('matterportGallery');
+            const closeButtons = document.querySelectorAll('.fcc-close-modal');
+            const fetchPropertyBtn = document.getElementById('fetchPropertyData');
+            const confirmPropertyBtn = document.getElementById('confirmProperty');
+            const propertyAddress = document.getElementById('propertyAddress');
+            const propertyDataDisplay = document.getElementById('propertyDataDisplay');
+            const surveyUpload = document.getElementById('surveyUpload');
+            const matterportEmbed = document.getElementById('matterportEmbed');
+            const selectedHomeTitle = document.getElementById('selectedHomeTitle');
+            const estimateDetails = document.getElementById('estimateDetails');
+            const codeCompliance = document.getElementById('codeCompliance');
+            const floorPlanSvg = document.getElementById('floorPlanSvg');
+            const addSofaBtn = document.getElementById('addSofa');
+            const addBedBtn = document.getElementById('addBed');
+            const addTableBtn = document.getElementById('addTable');
+            const addChairBtn = document.getElementById('addChair');
+            const clearFurnitureBtn = document.getElementById('clearFurniture');
+            const downloadPlanBtn = document.getElementById('downloadPlan');
+            const contactUsBtn = document.getElementById('contactUs');
+            const furniturePlanner = document.querySelector('.furniture-planner');
+
+            btn.addEventListener('click', openModal);
+            closeButtons.forEach(button => button.addEventListener('click', closeModal));
+            fetchPropertyBtn.addEventListener('click', fetchPropertyData);
+            confirmPropertyBtn.addEventListener('click', confirmProperty);
+            surveyUpload.addEventListener('change', handleSurveyUpload);
+            addSofaBtn.addEventListener('click', () => addFurniture('sofa'));
+            addBedBtn.addEventListener('click', () => addFurniture('bed'));
+            addTableBtn.addEventListener('click', () => addFurniture('table'));
+            addChairBtn.addEventListener('click', () => addFurniture('chair'));
+            clearFurnitureBtn.addEventListener('click', clearFurniture);
+            downloadPlanBtn.addEventListener('click', downloadPlan);
+            contactUsBtn.addEventListener('click', contactUs);
+
+            function openModal() {
+                modal.style.display = 'block';
+                initializeWizard();
+            }
+
+            function closeModal() {
+                modal.style.display = 'none';
+                galleryModal.style.display = 'none';
+                propertyModal.style.display = 'none';
+                resultsModal.style.display = 'none';
+            }
+
+            function initializeWizard() {
+                wizardSteps.innerHTML = '';
+                currentStep = 0;
+                userSelections = {};
+                renderStep(currentStep);
+                updateProgressBar();
+            }
+
+            function renderStep(stepIndex) {
+                wizardSteps.innerHTML = '';
+                
+                const question = wizardQuestions[stepIndex];
+                const stepDiv = document.createElement('div');
+                stepDiv.className = `wizard-step ${stepIndex === currentStep ? 'active' : ''}`;
+                
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'wizard-question';
+                questionDiv.textContent = question.question;
+                stepDiv.appendChild(questionDiv);
+                
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'wizard-options';
+                
+                question.options.forEach(option => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'wizard-option';
+                    if (userSelections[question.key] === option.value || 
+                        (question.multiSelect && userSelections[question.key] && userSelections[question.key].includes(option.value))) {
+                        optionDiv.classList.add('selected');
+                    }
+                    
+                    optionDiv.innerHTML = `
+                        <i class="fas ${option.icon} fa-2x"></i>
+                        <div>${option.label}</div>
+                    `;
+                    
+                    optionDiv.addEventListener('click', () => selectOption(question, option));
+                    optionsDiv.appendChild(optionDiv);
+                });
+                
+                stepDiv.appendChild(optionsDiv);
+                
+                const navDiv = document.createElement('div');
+                navDiv.style.marginTop = '20px';
+                navDiv.style.display = 'flex';
+                navDiv.style.justifyContent = 'space-between';
+                
+                if (stepIndex > 0) {
+                    const backBtn = document.createElement('button');
+                    backBtn.className = 'fcc-secondary-btn';
+                    backBtn.textContent = 'Back';
+                    backBtn.addEventListener('click', () => navigateStep(-1));
+                    navDiv.appendChild(backBtn);
+                } else {
+                    navDiv.appendChild(document.createElement('div'));
+                }
+                
+                if (stepIndex < wizardQuestions.length - 1) {
+                    const nextBtn = document.createElement('button');
+                    nextBtn.className = 'fcc-primary-btn';
+                    nextBtn.textContent = 'Next';
+                    nextBtn.disabled = !userSelections[question.key];
+                    nextBtn.addEventListener('click', () => navigateStep(1));
+                    navDiv.appendChild(nextBtn);
+                } else {
+                    const finishBtn = document.createElement('button');
+                    finishBtn.className = 'fcc-primary-btn';
+                    finishBtn.textContent = 'Find My Home Style';
+                    finishBtn.disabled = !userSelections[question.key];
+                    finishBtn.addEventListener('click', finishWizard);
+                    navDiv.appendChild(finishBtn);
+                }
+                
+                stepDiv.appendChild(navDiv);
+                wizardSteps.appendChild(stepDiv);
+            }
+
+            function selectOption(question, option) {
+                if (question.multiSelect) {
+                    if (!userSelections[question.key]) {
+                        userSelections[question.key] = [];
+                    }
+                    const index = userSelections[question.key].indexOf(option.value);
+                    if (index === -1) {
+                        userSelections[question.key].push(option.value);
+                    } else {
+                        userSelections[question.key].splice(index, 1);
+                    }
+                } else {
+                    userSelections[question.key] = option.value;
+                }
+                
+                const allOptions = document.querySelectorAll('.wizard-option');
+                allOptions.forEach(opt => opt.classList.remove('selected'));
+                
+                const selectedOptions = document.querySelectorAll(`.wizard-step.active .wizard-option`);
+                selectedOptions.forEach((opt, i) => {
+                    const optValue = question.options[i].value;
+                    if ((!question.multiSelect && userSelections[question.key] === optValue) ||
+                        (question.multiSelect && userSelections[question.key] && userSelections[question.key].includes(optValue))) {
+                        opt.classList.add('selected');
+                    }
+                });
+                
+                const nextBtn = document.querySelector('.wizard-step.active .fcc-primary-btn');
+                if (nextBtn) {
+                    nextBtn.disabled = !userSelections[question.key];
+                }
+            }
+
+            function navigateStep(direction) {
+                currentStep += direction;
+                renderStep(currentStep);
+                updateProgressBar();
+            }
+
+            function updateProgressBar() {
+                const progress = ((currentStep + 1) / wizardQuestions.length) * 100;
+                progressBar.style.width = `${progress}%`;
+            }
+
+            function finishWizard() {
+                loadingSpinner.style.display = 'block';
+                
+                setTimeout(() => {
+                    filterModels();
+                    loadingSpinner.style.display = 'none';
+                    modal.style.display = 'none';
+                    showPropertyModal();
+                }, 1500);
+            }
+
+            function filterModels() {
+                selectedModels = matterportModels.filter(model => {
+                    // Style filter
+                    if (userSelections.style && model.style !== userSelections.style) return false;
+                    
+                    // Bedrooms filter
+                    if (userSelections.bedrooms) {
+                        if (userSelections.bedrooms === 5 && model.bedrooms < 5) return false;
+                        if (userSelections.bedrooms !== 5 && model.bedrooms !== userSelections.bedrooms) return false;
+                    }
+                    
+                    // Bathrooms filter
+                    if (userSelections.bathrooms) {
+                        if (userSelections.bathrooms === 3.5 && model.bathrooms < 3.5) return false;
+                        if (userSelections.bathrooms !== 3.5 && model.bathrooms < userSelections.bathrooms) return false;
+                    }
+                    
+                    // Budget filter
+                    if (userSelections.budget && model.priceEstimate > userSelections.budget) return false;
+                    
+                    // Features filter
+                    if (userSelections.features && userSelections.features.length > 0) {
+                        const hasAllFeatures = userSelections.features.every(feat => 
+                            model.features.some(mf => mf.toLowerCase().includes(feat.toLowerCase()))
+                        );
+                        if (!hasAllFeatures) return false;
+                    }
+                    
+                    return true;
+                });
+                
+                // If no models match exactly, show closest matches
+                if (selectedModels.length === 0) {
+                    selectedModels = matterportModels.slice(0, 3);
+                }
+            }
+
+            function showGallery() {
+                matterportGallery.innerHTML = '';
+                
+                selectedModels.forEach(model => {
+                    const galleryItem = document.createElement('div');
+                    galleryItem.className = 'gallery-item';
+                    galleryItem.innerHTML = `
+                        <iframe width="100%" height="300" src="https://my.matterport.com/show/?m=${model.id}" frameborder="0" allowfullscreen allow="xr-spatial-tracking"></iframe>
+                        <div class="gallery-item-info">
+                            <h3>${model.title}</h3>
+                            <p>${model.description}</p>
+                            <p><strong>${model.bedrooms} BR, ${model.bathrooms} BA | ${model.sqft} sq ft</strong></p>
+                            <button class="fcc-primary-btn select-home" data-id="${model.id}">Select This Home</button>
+                        </div>
+                    `;
+                    matterportGallery.appendChild(galleryItem);
+                });
+                
+                galleryModal.style.display = 'block';
+                
+                document.querySelectorAll('.select-home').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const modelId = this.getAttribute('data-id');
+                        selectHome(modelId);
+                    });
+                });
+            }
+
+            function selectHome(modelId) {
+                selectedHome = matterportModels.find(m => m.id === modelId);
+                galleryModal.style.display = 'none';
+                showResults();
+            }
+
+            function showPropertyModal() {
+                propertyModal.style.display = 'block';
+            }
+
+            function fetchPropertyData() {
+                const address = propertyAddress.value.trim();
+                if (!address) {
+                    alert('Please enter a property address');
+                    return;
+                }
+                
+                loadingSpinner.style.display = 'block';
+                propertyDataDisplay.innerHTML = 'Fetching property data...';
+                
+                // Simulate API call to property appraiser
+                setTimeout(() => {
+                    // Mock data - in real implementation, you would call your backend
+                    // which would call the county property appraiser API
+                    propertyData = {
+                        address: address,
+                        parcelId: '123-456-789-000',
+                        lotSize: '12,500 sq ft',
+                        zoning: 'RS-1 (Residential Single Family)',
+                        existingImprovements: 'Single family home (2,400 sq ft)',
+                        yearBuilt: 1985,
+                        marketValue: '$450,000'
+                    };
+                    
+                    renderPropertyData();
+                    loadingSpinner.style.display = 'none';
+                    confirmPropertyBtn.disabled = false;
+                }, 2000);
+            }
+
+            function handleSurveyUpload(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                loadingSpinner.style.display = 'block';
+                propertyDataDisplay.innerHTML = 'Processing survey plan...';
+                
+                // Simulate file processing
+                setTimeout(() => {
+                    propertyData = {
+                        surveyPlan: file.name,
+                        lotDimensions: '100ft x 125ft',
+                        easements: 'None recorded',
+                        floodZone: 'X (0.2% Annual Chance)'
+                    };
+                    
+                    renderPropertyData();
+                    loadingSpinner.style.display = 'none';
+                    confirmPropertyBtn.disabled = false;
+                }, 1500);
+            }
+
+            function renderPropertyData() {
+                let html = '<h3>Property Details</h3><ul>';
+                
+                for (const [key, value] of Object.entries(propertyData)) {
+                    html += `<li><strong>${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</strong> ${value}</li>`;
+                }
+                
+                html += '</ul>';
+                
+                // Check if there's an existing structure
+                if (propertyData.existingImprovements && !propertyData.existingImprovements.includes('None')) {
+                    html += '<div class="fcc-alert" style="background:#fff3cd;padding:10px;border-radius:4px;margin-top:10px;">';
+                    html += '<strong>Note:</strong> This property has existing structures. The system will switch to renovation mode.';
+                    html += '</div>';
+                }
+                
+                propertyDataDisplay.innerHTML = html;
+            }
+
+            function confirmProperty() {
+                propertyModal.style.display = 'none';
+                showGallery();
+            }
+
+            function showResults() {
+                selectedHomeTitle.textContent = selectedHome.title;
+                
+                // Embed Matterport tour
+                matterportEmbed.innerHTML = `
+                    <iframe width="100%" height="500" src="https://my.matterport.com/show/?m=${selectedHome.id}" frameborder="0" allowfullscreen allow="xr-spatial-tracking"></iframe>
+                `;
+                
+                // Generate estimate
+                const contractorFee = selectedHome.priceEstimate * 0.20;
+                const totalEstimate = selectedHome.priceEstimate + contractorFee;
+                
+                estimateDetails.innerHTML = `
+                    <p><strong>Base Construction Cost:</strong> $${selectedHome.priceEstimate.toLocaleString()}</p>
+                    <p><strong>Contractor Fee (20%):</strong> $${contractorFee.toLocaleString()}</p>
+                    <p><strong>Total Estimated Cost:</strong> $${totalEstimate.toLocaleString()}</p>
+                    <p><em>Note: This is an estimate only. Final costs may vary based on site conditions, material choices, and other factors.</em></p>
+                `;
+                
+                // Generate code compliance
+                codeCompliance.innerHTML = `
+                    <ul>
+                        <li>Compliant with Florida Building Code 2023, 7th Edition</li>
+                        <li>Windborne Debris Region: ${selectedHome.style === 'mediterranean' ? 'Yes (Impact resistant glass required)' : 'No'}</li>
+                        <li>Minimum design wind speed: 160 mph (ASCE 7-22)</li>
+                        <li>Flood zone compliance: ${propertyData.floodZone ? propertyData.floodZone : 'To be determined'}</li>
+                        <li>Energy efficiency: Florida Energy Code compliant</li>
+                    </ul>
+                `;
+                
+                // Initialize floor plan
+                initializeFloorPlan();
+                
+                // Show furniture planner if new construction
+                if (!propertyData.existingImprovements || propertyData.existingImprovements.includes('None')) {
+                    furniturePlanner.style.display = 'block';
+                } else {
+                    furniturePlanner.style.display = 'none';
+                }
+                
+                resultsModal.style.display = 'block';
+            }
+
+            function initializeFloorPlan() {
+                floorPlanSvg.innerHTML = '';
+                
+                // Create floor plan based on selected home
+                const svgNS = "http://www.w3.org/2000/svg";
+                
+                // Main walls
+                const createWall = (x1, y1, x2, y2) => {
+                    const wall = document.createElementNS(svgNS, "line");
+                    wall.setAttribute("x1", x1);
+                    wall.setAttribute("y1", y1);
+                    wall.setAttribute("x2", x2);
+                    wall.setAttribute("y2", y2);
+                    wall.setAttribute("stroke", "#333");
+                    wall.setAttribute("stroke-width", "5");
+                    floorPlanSvg.appendChild(wall);
+                };
+                
+                // Sample floor plan - in real app this would be more sophisticated
+                createWall(100, 100, 400, 100); // Top wall
+                createWall(400, 100, 400, 300); // Right wall
+                createWall(400, 300, 100, 300); // Bottom wall
+                createWall(100, 300, 100, 100); // Left wall
+                createWall(250, 100, 250, 200); // Interior wall
+                
+                // Add dimensions
+                addDimension(100, 90, 400, 90, "30'0\""); // Width dimension
+                addDimension(410, 100, 410, 300, "20'0\""); // Height dimension
+                
+                // Add room labels
+                addText(150, 150, "Living Room");
+                addText(300, 150, "Kitchen");
+                addText(150, 250, "Bedroom");
+                
+                // Set up drag and drop
+                floorPlanSvg.addEventListener('mousedown', startDrag);
+                floorPlanSvg.addEventListener('mousemove', dragItem);
+                floorPlanSvg.addEventListener('mouseup', endDrag);
+                floorPlanSvg.addEventListener('mouseleave', endDrag);
+            }
+
+            function addDimension(x1, y1, x2, y2, text) {
+                const svgNS = "http://www.w3.org/2000/svg";
+                
+                // Dimension line
+                const dimLine = document.createElementNS(svgNS, "line");
+                dimLine.setAttribute("x1", x1);
+                dimLine.setAttribute("y1", y1);
+                dimLine.setAttribute("x2", x2);
+                dimLine.setAttribute("y2", y2);
+                dimLine.setAttribute("class", "dimension-line");
+                floorPlanSvg.appendChild(dimLine);
+                
+                // Dimension text
+                const dimText = document.createElementNS(svgNS, "text");
+                dimText.setAttribute("x", (x1 + x2) / 2);
+                dimText.setAttribute("y", (y1 + y2) / 2);
+                dimText.setAttribute("class", "dimension-text");
+                dimText.setAttribute("text-anchor", "middle");
+                dimText.setAttribute("dominant-baseline", "middle");
+                dimText.textContent = text;
+                floorPlanSvg.appendChild(dimText);
+            }
+
+            function addText(x, y, text) {
+                const svgNS = "http://www.w3.org/2000/svg";
+                const textEl = document.createElementNS(svgNS, "text");
+                textEl.setAttribute("x", x);
+                textEl.setAttribute("y", y);
+                textEl.setAttribute("font-size", "14");
+                textEl.setAttribute("text-anchor", "middle");
+                textEl.textContent = text;
+                floorPlanSvg.appendChild(textEl);
+            }
+
+            function addFurniture(type) {
+                const svgNS = "http://www.w3.org/2000/svg";
+                const furniture = document.createElementNS(svgNS, "rect");
+                
+                let width, height, fill;
+                switch (type) {
+                    case 'sofa':
+                        width = 80;
+                        height = 30;
+                        fill = "#8B4513";
+                        break;
+                    case 'bed':
+                        width = 60;
+                        height = 80;
+                        fill = "#4682B4";
+                        break;
+                    case 'table':
+                        width = 50;
+                        height = 50;
+                        fill = "#D2B48C";
+                        break;
+                    case 'chair':
+                        width = 25;
+                        height = 25;
+                        fill = "#A0522D";
+                        break;
+                }
+                
+                furniture.setAttribute("width", width);
+                furniture.setAttribute("height", height);
+                furniture.setAttribute("fill", fill);
+                furniture.setAttribute("x", 200);
+                furniture.setAttribute("y", 200);
+                furniture.setAttribute("class", "furniture-item");
+                furniture.setAttribute("data-type", type);
+                
+                furnitureItems.push({
+                    element: furniture,
+                    type: type,
+                    x: 200,
+                    y: 200
+                });
+                
+                floorPlanSvg.appendChild(furniture);
+            }
+
+            function clearFurniture() {
+                furnitureItems.forEach(item => {
+                    floorPlanSvg.removeChild(item.element);
+                });
+                furnitureItems = [];
+            }
+
+            function startDrag(e) {
+                if (e.target.classList.contains('furniture-item')) {
+                    isDragging = true;
+                    draggedItem = e.target;
+                    
+                    // Find the furniture item in our array
+                    const item = furnitureItems.find(i => i.element === draggedItem);
+                    if (item) {
+                        const rect = draggedItem.getBoundingClientRect();
+                        offsetX = e.clientX - rect.left;
+                        offsetY = e.clientY - rect.top;
+                    }
+                }
+            }
+
+            function dragItem(e) {
+                if (!isDragging || !draggedItem) return;
+                
+                const svgRect = floorPlanSvg.getBoundingClientRect();
+                const x = e.clientX - svgRect.left - offsetX;
+                const y = e.clientY - svgRect.top - offsetY;
+                
+                // Update position
+                draggedItem.setAttribute("x", x);
+                draggedItem.setAttribute("y", y);
+                
+                // Update our data
+                const item = furnitureItems.find(i => i.element === draggedItem);
+                if (item) {
+                    item.x = x;
+                    item.y = y;
+                }
+            }
+
+            function endDrag() {
+                isDragging = false;
+                draggedItem = null;
+            }
+
+            function downloadPlan() {
+                // In a real implementation, this would generate and download PDF/PNG files
+                alert('In a full implementation, this would generate and download:\n- 2D Floor Plan\n- Elevations\n- Construction Estimate\n- Code Compliance Report');
+            }
+
+            function contactUs() {
+                // In a real implementation, this would open a contact form or redirect
+                alert('In a full implementation, this would open a contact form with all the project details pre-filled.');
+            }
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) modal.style.display = 'none';
+                if (event.target === galleryModal) galleryModal.style.display = 'none';
+                if (event.target === propertyModal) propertyModal.style.display = 'none';
+                if (event.target === resultsModal) resultsModal.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
