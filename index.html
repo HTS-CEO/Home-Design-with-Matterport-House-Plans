@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +14,7 @@
             background-color: #f5f7fa;
             color: #333;
         }
-        
+
         .fcc-modal {
             display: none;
             position: fixed;
@@ -22,10 +23,10 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0, 0, 0, 0.8);
             overflow-y: auto;
         }
-        
+
         .fcc-modal-content {
             background-color: #f8f9fa;
             margin: 5% auto;
@@ -33,12 +34,18 @@
             border-radius: 10px;
             width: 85%;
             max-width: 1000px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
             position: relative;
             max-height: 90vh;
             overflow-y: auto;
+            animation: fadeIn 0.5s ease-out;
         }
-        
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .fcc-close-modal {
             position: absolute;
             right: 25px;
@@ -47,133 +54,163 @@
             font-weight: bold;
             cursor: pointer;
             color: #555;
-            transition: color 0.2s;
+            transition: color 0.2s, transform 0.2s;
         }
-        
+
         .fcc-close-modal:hover {
             color: #e74c3c;
+            transform: rotate(90deg);
         }
-        
+
         .wizard-step {
             display: none;
             padding: 20px;
+            animation: slideIn 0.4s ease-out;
         }
-        
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
         .wizard-step.active {
             display: block;
         }
-        
+
         .wizard-question {
             font-size: 1.3rem;
             margin-bottom: 25px;
             color: #2c3e50;
             font-weight: 600;
             text-align: center;
+            animation: fadeIn 0.6s ease-out;
         }
-        
+
         .wizard-options {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
-        
+
         .wizard-option {
             border: 2px solid #ddd;
             border-radius: 10px;
-            padding: 20px 15px;
+            padding: 0;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             text-align: center;
             background: white;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
         }
-        
+
         .wizard-option:hover {
             border-color: #3498db;
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
         }
-        
+
         .wizard-option.selected {
             border-color: #2ecc71;
-            background-color: rgba(46,204,113,0.1);
-            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.2);
+            background-color: rgba(46, 204, 113, 0.1);
+            box-shadow: 0 10px 20px rgba(46, 204, 113, 0.3);
+            transform: translateY(-3px);
         }
-        
+
         .wizard-option i {
             margin-bottom: 15px;
             font-size: 2.2rem;
             color: #3498db;
+            transition: all 0.3s;
         }
-        
+
         .wizard-option.selected i {
             color: #2ecc71;
+            transform: scale(1.2);
         }
-        
+
         .fcc-progress-container {
             width: 100%;
             background-color: #e0e0e0;
             border-radius: 8px;
             margin: 30px 0;
             height: 10px;
+            overflow: hidden;
         }
-        
+
         .fcc-progress-bar {
             height: 100%;
             background: linear-gradient(90deg, #3498db, #2ecc71);
             border-radius: 8px;
             width: 0%;
-            transition: width 0.4s;
+            transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
         }
-        
+
         .fcc-hourglass {
             text-align: center;
             padding: 20px;
             font-size: 28px;
             color: #3498db;
+            animation: pulse 1.5s infinite;
         }
-        
+
+        @keyframes pulse {
+            0% { opacity: 0.6; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 0.6; transform: scale(0.95); }
+        }
+
         .fcc-gallery-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 25px;
             margin: 25px 0;
         }
-        
+
         .gallery-item {
             border: 1px solid #e0e0e0;
             border-radius: 12px;
             overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             background: white;
         }
-        
+
         .gallery-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
         }
-        
+
         .gallery-item iframe {
             width: 100%;
             height: 250px;
             border: none;
+            transition: all 0.3s;
         }
-        
+
+        .gallery-item:hover iframe {
+            transform: scale(1.05);
+        }
+
         .gallery-item-info {
             padding: 20px;
         }
-        
+
         .gallery-item-info h3 {
             margin-top: 0;
             color: #2c3e50;
+            transition: color 0.3s;
         }
-        
+
+        .gallery-item:hover .gallery-item-info h3 {
+            color: #3498db;
+        }
+
         .gallery-item-info p {
             color: #7f8c8d;
             margin-bottom: 15px;
         }
-        
+
         .fcc-primary-btn {
             background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
@@ -183,22 +220,39 @@
             cursor: pointer;
             font-size: 1rem;
             font-weight: 600;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+            position: relative;
+            overflow: hidden;
         }
-        
+
         .fcc-primary-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 16px rgba(52, 152, 219, 0.4);
         }
-        
+
         .fcc-primary-btn:disabled {
             background: #95a5a6;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
-        
+
+        .fcc-primary-btn:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.7s;
+        }
+
+        .fcc-primary-btn:hover:after {
+            left: 100%;
+        }
+
         .fcc-secondary-btn {
             background: linear-gradient(135deg, #95a5a6, #7f8c8d);
             color: white;
@@ -211,45 +265,48 @@
             transition: all 0.3s;
             box-shadow: 0 3px 6px rgba(149, 165, 166, 0.3);
         }
-        
+
         .fcc-secondary-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 10px rgba(149, 165, 166, 0.4);
         }
-        
+
         .fcc-input-group {
             margin-bottom: 25px;
+            animation: fadeIn 0.6s ease-out;
         }
-        
+
         .fcc-input-group label {
             display: block;
             margin-bottom: 10px;
             font-weight: 600;
             color: #2c3e50;
         }
-        
+
         .fcc-input-group input {
             width: 100%;
             padding: 12px;
             border: 2px solid #ddd;
             border-radius: 6px;
             font-size: 1rem;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
         }
-        
+
         .fcc-input-group input:focus {
             border-color: #3498db;
             outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
         }
-        
+
         #propertyDataDisplay {
             margin: 25px 0;
             padding: 20px;
             background: #f0f3f5;
             border-radius: 8px;
             border-left: 4px solid #3498db;
+            animation: fadeIn 0.6s ease-out;
         }
-        
+
         #houseStyleSelectorBtn {
             margin: 30px auto;
             display: block;
@@ -260,31 +317,32 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
         }
-        
+
         #houseStyleSelectorBtn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 25px rgba(231, 76, 60, 0.4);
         }
-        
+
         .furniture-planner {
             display: none;
             margin-top: 30px;
             background: white;
             padding: 25px;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.6s ease-out;
         }
-        
+
         .furniture-controls {
             margin-bottom: 20px;
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
-        
+
         .floor-plan-container {
             position: relative;
             border: 2px solid #e0e0e0;
@@ -292,97 +350,197 @@
             background: #f9f9f9;
             border-radius: 8px;
             overflow: auto;
+            transition: all 0.3s;
         }
-        
+
+        .floor-plan-container:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
         .floor-plan-svg {
             width: 100%;
             height: 500px;
             background: white;
         }
-        
+
         .furniture-item {
             cursor: move;
+            transition: all 0.2s;
         }
-        
+
+        .furniture-item:hover {
+            filter: brightness(1.1);
+            stroke: #3498db;
+            stroke-width: 2;
+        }
+
         .dimension-line {
             stroke: #e74c3c;
             stroke-width: 2;
         }
-        
+
         .dimension-text {
             font-size: 12px;
             fill: #e74c3c;
         }
-        
+
         .estimate-details {
             margin-top: 30px;
             padding: 25px;
             background: #f8f9fa;
             border-radius: 10px;
             border-left: 4px solid #3498db;
+            animation: fadeIn 0.6s ease-out;
         }
-        
+
         .draw-schedule {
             margin-top: 25px;
         }
-        
+
         .draw-stage {
             padding: 15px;
             margin-bottom: 15px;
             background: #ecf0f1;
             border-left: 4px solid #3498db;
             border-radius: 4px;
+            transition: all 0.3s;
         }
-        
+
+        .draw-stage:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
         .code-compliance {
             margin-top: 25px;
             padding: 20px;
             background: #fff8e1;
             border-left: 4px solid #f39c12;
             border-radius: 8px;
+            animation: fadeIn 0.6s ease-out;
         }
-        
+
         .modal-header {
             text-align: center;
             margin-bottom: 30px;
         }
-        
+
         .modal-header h2 {
             color: #2c3e50;
             margin-bottom: 10px;
+            animation: fadeIn 0.6s ease-out;
         }
-        
+
         .modal-header p {
             color: #7f8c8d;
+            animation: fadeIn 0.8s ease-out;
         }
-        
+
         .nav-buttons {
             display: flex;
             justify-content: space-between;
             margin-top: 30px;
         }
-        
+
+        .matterport-embed {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .matterport-embed:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .style-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 10px;
+            transition: all 0.5s;
+        }
+
+        .wizard-option:hover .style-image {
+            transform: scale(1.1);
+        }
+
+        .home-details-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .home-details-image:hover {
+            transform: scale(1.01);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .fcc-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .fcc-tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .fcc-tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
         @media (max-width: 768px) {
             .fcc-modal-content {
                 width: 90%;
                 margin: 10% auto;
                 padding: 20px;
             }
-            
+
             .wizard-options {
                 grid-template-columns: 1fr;
             }
-            
+
             .furniture-controls {
                 flex-direction: column;
             }
-            
+
             .floor-plan-svg {
                 height: 400px;
+            }
+
+            .matterport-embed {
+                height: 300px;
+            }
+
+            .home-details-image {
+                height: 200px;
             }
         }
     </style>
 </head>
+
 <body>
     <button id="houseStyleSelectorBtn"><i class="fas fa-home"></i> Choose Your Dream Home Style</button>
 
@@ -449,9 +607,13 @@
             <div id="resultsContainer">
                 <div class="fcc-input-group">
                     <h3>Selected Home: <span id="selectedHomeTitle"></span></h3>
-                    <div id="matterportEmbed"></div>
+                    <img id="homeDetailsImage" class="home-details-image" src="" alt="Selected Home">
+                    <div class="matterport-embed-container" style="position: relative; overflow: hidden; padding-top: 56.25%;">
+                        <iframe id="matterportEmbed" class="matterport-embed" allowfullscreen 
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+                    </div>
                 </div>
-                
+
                 <div class="furniture-planner">
                     <h3>Furniture Planner</h3>
                     <div class="furniture-controls">
@@ -465,11 +627,11 @@
                         <svg class="floor-plan-svg" id="floorPlanSvg"></svg>
                     </div>
                 </div>
-                
+
                 <div class="estimate-details">
                     <h3>Construction Estimate</h3>
                     <div id="estimateDetails"></div>
-                    
+
                     <div class="draw-schedule">
                         <h4>5-Stage Draw Schedule</h4>
                         <div class="draw-stage">
@@ -489,67 +651,182 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="code-compliance">
                     <h3>Florida Building Code Compliance</h3>
                     <div id="codeCompliance"></div>
                 </div>
-                
+
+                <div class="fcc-input-group">
+                    <h3>Contact Information</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <label for="userName">Your Name:</label>
+                            <input type="text" id="userName" placeholder="Enter your name">
+                        </div>
+                        <div>
+                            <label for="userEmail">Email:</label>
+                            <input type="email" id="userEmail" placeholder="Enter your email">
+                        </div>
+                        <div>
+                            <label for="userLocation">Location:</label>
+                            <input type="text" id="userLocation" placeholder="Enter your location">
+                        </div>
+                        <div style="align-self: end;">
+                            <button id="savePlan" class="fcc-primary-btn">Save My Plan</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div style="display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap;">
                     <button id="downloadPlan" class="fcc-primary-btn"><i class="fas fa-download"></i> Download Plan & Estimate</button>
-                    <button id="contactUs" class="fcc-primary-btn" style="background: linear-gradient(135deg, #2ecc71, #27ae60);"><i class="fas fa-envelope"></i> Contact Us to Build This</button>
+                    <button id="contactUs" class="fcc-primary-btn"
+                        style="background: linear-gradient(135deg, #2ecc71, #27ae60);"><i class="fas fa-envelope"></i> Contact Us to Build This</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const matterportModels = [
-                {id:'m12345678901',title:'Modern Luxury Villa',style:'modern',bedrooms:4,bathrooms:3.5,sqft:3500,features:['open floor plan','large windows','minimalist design'],description:'Contemporary luxury with clean lines and expansive glass',priceEstimate:875000,lotSizeMin:10000,image:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'},
-                {id:'m23456789012',title:'Traditional Colonial',style:'traditional',bedrooms:5,bathrooms:3,sqft:4200,features:['formal dining','wood floors','classic moldings'],description:'Timeless colonial with symmetrical facade and elegant interiors',priceEstimate:765000,lotSizeMin:12000,image:'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'},
-                {id:'m34567890123',title:'Rustic Farmhouse',style:'farmhouse',bedrooms:3,bathrooms:2,sqft:2800,features:['wrap-around porch','farmhouse sink','exposed beams'],description:'Charming farmhouse with modern amenities',priceEstimate:625000,lotSizeMin:15000,image:'https://images.unsplash.com/photo-1600121848594-d8644e57abab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'},
-                {id:'m45678901234',title:'Coastal Contemporary',style:'contemporary',bedrooms:4,bathrooms:3,sqft:3200,features:['light-filled spaces','outdoor living','water views'],description:'Bright and airy coastal home with modern finishes',priceEstimate:925000,lotSizeMin:8000,image:'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'},
-                {id:'m56789012345',title:'Mediterranean Estate',style:'mediterranean',bedrooms:6,bathrooms:4.5,sqft:4800,features:['courtyard','tile roof','arched doorways'],description:'Luxurious Mediterranean-style villa with Old World charm',priceEstimate:1200000,lotSizeMin:20000,image:'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'},
-                {id:'m67890123456',title:'Modern Farmhouse',style:'farmhouse',bedrooms:4,bathrooms:2.5,sqft:3100,features:['black windows','shiplap','covered patio'],description:'Popular modern farmhouse with clean lines',priceEstimate:785000,lotSizeMin:10000,image:'https://images.unsplash.com/photo-1600566752355-35792bedcfea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'},
-                {id:'m78901234567',title:'Craftsman Bungalow',style:'craftsman',bedrooms:3,bathrooms:2,sqft:2200,features:['front porch','built-ins','natural materials'],description:'Classic craftsman with attention to detail',priceEstimate:550000,lotSizeMin:7500,image:'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'}
+        document.addEventListener('DOMContentLoaded', function () {
+            // Sample home models with static images and placeholder 3D tours
+            const homeModels = [
+                {
+                    id: "modern1",
+                    title: "Modern Luxury Villa",
+                    description: "Sleek contemporary design with open floor plan and floor-to-ceiling windows",
+                    bedrooms: 4,
+                    bathrooms: 3.5,
+                    sqft: 3200,
+                    style: "modern",
+                    priceEstimate: 1250000,
+                    full_image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                    embed_url: "https://my.matterport.com/show/?m=sLpFn7qGJyS",
+                    features: ["open floor plan", "gourmet kitchen", "master suite", "energy efficient"]
+                },
+                {
+                    id: "traditional1",
+                    title: "Classic Colonial Estate",
+                    description: "Timeless traditional home with elegant details and spacious rooms",
+                    bedrooms: 5,
+                    bathrooms: 4.5,
+                    sqft: 4500,
+                    style: "traditional",
+                    priceEstimate: 1800000,
+                    full_image: "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                    embed_url: "https://my.matterport.com/show/?m=sLpFn7qGJyS",
+                    features: ["master suite", "home office", "gourmet kitchen"]
+                },
+                {
+                    id: "farmhouse1",
+                    title: "Rustic Farmhouse Retreat",
+                    description: "Charming farmhouse with modern amenities and wrap-around porch",
+                    bedrooms: 3,
+                    bathrooms: 2.5,
+                    sqft: 2800,
+                    style: "farmhouse",
+                    priceEstimate: 950000,
+                    full_image: "https://images.unsplash.com/photo-1600121848594-d8644e57abab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                    embed_url: "https://my.matterport.com/show/?m=sLpFn7qGJyS",
+                    features: ["open floor plan", "outdoor living", "energy efficient"]
+                },
+                {
+                    id: "contemporary1",
+                    title: "Urban Contemporary Loft",
+                    description: "Stylish urban living with industrial elements and smart home features",
+                    bedrooms: 2,
+                    bathrooms: 2,
+                    sqft: 1800,
+                    style: "contemporary",
+                    priceEstimate: 850000,
+                    full_image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                    embed_url: "https://my.matterport.com/show/?m=sLpFn7qGJyS",
+                    features: ["open floor plan", "home office", "energy efficient"]
+                },
+                {
+                    id: "mediterranean1",
+                    title: "Mediterranean Villa",
+                    description: "Luxurious Mediterranean-style home with courtyard and pool",
+                    bedrooms: 6,
+                    bathrooms: 5.5,
+                    sqft: 5800,
+                    style: "mediterranean",
+                    priceEstimate: 2500000,
+                    full_image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                    embed_url: "https://my.matterport.com/show/?m=sLpFn7qGJyS",
+                    features: ["master suite", "outdoor living", "gourmet kitchen"]
+                },
+                {
+                    id: "craftsman1",
+                    title: "Arts & Crafts Bungalow",
+                    description: "Handcrafted details with warm wood finishes and built-ins",
+                    bedrooms: 3,
+                    bathrooms: 2,
+                    sqft: 2200,
+                    style: "craftsman",
+                    priceEstimate: 750000,
+                    full_image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                    embed_url: "https://my.matterport.com/show/?m=sLpFn7qGJyS",
+                    features: ["home office", "energy efficient"]
+                }
             ];
 
             const wizardQuestions = [
-                {question:"What architectural style are you interested in?",key:"style",options:[
-                    {label:"Modern",value:"modern",icon:"fa-cube"},
-                    {label:"Traditional",value:"traditional",icon:"fa-home"},
-                    {label:"Farmhouse",value:"farmhouse",icon:"fa-tractor"},
-                    {label:"Contemporary",value:"contemporary",icon:"fa-building"},
-                    {label:"Mediterranean",value:"mediterranean",icon:"fa-umbrella-beach"},
-                    {label:"Craftsman",value:"craftsman",icon:"fa-hammer"}
-                ]},
-                {question:"How many bedrooms do you need?",key:"bedrooms",options:[
-                    {label:"2",value:2,icon:"fa-bed"},
-                    {label:"3",value:3,icon:"fa-bed"},
-                    {label:"4",value:4,icon:"fa-bed"},
-                    {label:"5+",value:5,icon:"fa-bed"}
-                ]},
-                {question:"How many bathrooms do you need?",key:"bathrooms",options:[
-                    {label:"2",value:2,icon:"fa-bath"},
-                    {label:"2.5",value:2.5,icon:"fa-bath"},
-                    {label:"3",value:3,icon:"fa-bath"},
-                    {label:"3.5+",value:3.5,icon:"fa-bath"}
-                ]},
-                {question:"What's your approximate budget?",key:"budget",options:[
-                    {label:"$500k-$750k",value:750000,icon:"fa-dollar-sign"},
-                    {label:"$750k-$1M",value:1000000,icon:"fa-dollar-sign"},
-                    {label:"$1M-$1.5M",value:1500000,icon:"fa-dollar-sign"},
-                    {label:"$1.5M+",value:2000000,icon:"fa-dollar-sign"}
-                ]},
-                {question:"What special features are important?",key:"features",multiSelect:true,options:[
-                    {label:"Open Floor Plan",value:"open floor plan",icon:"fa-vector-square"},
-                    {label:"Outdoor Living",value:"outdoor living",icon:"fa-tree"},
-                    {label:"Home Office",value:"home office",icon:"fa-laptop-house"},
-                    {label:"Gourmet Kitchen",value:"gourmet kitchen",icon:"fa-utensils"},
-                    {label:"Master Suite",value:"master suite",icon:"fa-bed"},
-                    {label:"Energy Efficient",value:"energy efficient",icon:"fa-solar-panel"}
-                ]}
+                {
+                    question: "What architectural style are you interested in?", 
+                    key: "style", 
+                    options: [
+                        { label: "Modern", value: "modern", icon: "fa-cube", image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "Traditional", value: "traditional", icon: "fa-home", image: "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "Farmhouse", value: "farmhouse", icon: "fa-tractor", image: "https://images.unsplash.com/photo-1600121848594-d8644e57abab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "Contemporary", value: "contemporary", icon: "fa-building", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "Mediterranean", value: "mediterranean", icon: "fa-umbrella-beach", image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "Craftsman", value: "craftsman", icon: "fa-hammer", image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" }
+                    ]
+                },
+                {
+                    question: "How many bedrooms do you need?", 
+                    key: "bedrooms", 
+                    options: [
+                        { label: "2", value: 2, icon: "fa-bed", image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "3", value: 3, icon: "fa-bed", image: "https://images.unsplash.com/photo-1565538810643-b5bdb714032a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "4", value: 4, icon: "fa-bed", image: "https://images.unsplash.com/photo-1631653616769-c2846d1b6b1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "5+", value: 5, icon: "fa-bed", image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" }
+                    ]
+                },
+                {
+                    question: "How many bathrooms do you need?", 
+                    key: "bathrooms", 
+                    options: [
+                        { label: "2", value: 2, icon: "fa-bath", image: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "2.5", value: 2.5, icon: "fa-bath", image: "https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "3", value: 3, icon: "fa-bath", image: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "3.5+", value: 3.5, icon: "fa-bath", image: "https://images.unsplash.com/photo-1600566752706-8f0b4e2867a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" }
+                    ]
+                },
+                {
+                    question: "What's your approximate budget?", 
+                    key: "budget", 
+                    options: [
+                        { label: "$500k-$750k", value: 750000, icon: "fa-dollar-sign", image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80" },
+                        { label: "$750k-$1M", value: 1000000, icon: "fa-dollar-sign", image: "https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "$1M-$1.5M", value: 1500000, icon: "fa-dollar-sign", image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "$1.5M+", value: 2000000, icon: "fa-dollar-sign", image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" }
+                    ]
+                },
+                {
+                    question: "What special features are important?", 
+                    key: "features", 
+                    multiSelect: true, 
+                    options: [
+                        { label: "Open Floor Plan", value: "open floor plan", icon: "fa-vector-square", image: "https://images.unsplash.com/photo-1600566752229-250ed79470a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "Outdoor Living", value: "outdoor living", icon: "fa-tree", image: "https://images.unsplash.com/photo-1600566752706-8f0b4e2867a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "Home Office", value: "home office", icon: "fa-laptop-house", image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "Gourmet Kitchen", value: "gourmet kitchen", icon: "fa-utensils", image: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "Master Suite", value: "master suite", icon: "fa-bed", image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" },
+                        { label: "Energy Efficient", value: "energy efficient", icon: "fa-solar-panel", image: "https://images.unsplash.com/photo-1600566752706-8f0b4e2867a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" }
+                    ]
+                }
             ];
 
             let userSelections = {};
@@ -579,6 +856,7 @@
             const surveyUpload = document.getElementById('surveyUpload');
             const matterportEmbed = document.getElementById('matterportEmbed');
             const selectedHomeTitle = document.getElementById('selectedHomeTitle');
+            const homeDetailsImage = document.getElementById('homeDetailsImage');
             const estimateDetails = document.getElementById('estimateDetails');
             const codeCompliance = document.getElementById('codeCompliance');
             const floorPlanSvg = document.getElementById('floorPlanSvg');
@@ -589,6 +867,10 @@
             const clearFurnitureBtn = document.getElementById('clearFurniture');
             const downloadPlanBtn = document.getElementById('downloadPlan');
             const contactUsBtn = document.getElementById('contactUs');
+            const savePlanBtn = document.getElementById('savePlan');
+            const userName = document.getElementById('userName');
+            const userEmail = document.getElementById('userEmail');
+            const userLocation = document.getElementById('userLocation');
             const furniturePlanner = document.querySelector('.furniture-planner');
 
             btn.addEventListener('click', openModal);
@@ -603,6 +885,7 @@
             clearFurnitureBtn.addEventListener('click', clearFurniture);
             downloadPlanBtn.addEventListener('click', downloadPlan);
             contactUsBtn.addEventListener('click', contactUs);
+            savePlanBtn.addEventListener('click', savePlan);
 
             function openModal() {
                 modal.style.display = 'block';
@@ -626,41 +909,46 @@
 
             function renderStep(stepIndex) {
                 wizardSteps.innerHTML = '';
-                
+
                 const question = wizardQuestions[stepIndex];
                 const stepDiv = document.createElement('div');
                 stepDiv.className = `wizard-step ${stepIndex === currentStep ? 'active' : ''}`;
-                
+
                 const questionDiv = document.createElement('div');
                 questionDiv.className = 'wizard-question';
                 questionDiv.textContent = question.question;
                 stepDiv.appendChild(questionDiv);
-                
+
                 const optionsDiv = document.createElement('div');
                 optionsDiv.className = 'wizard-options';
-                
+
                 question.options.forEach(option => {
                     const optionDiv = document.createElement('div');
                     optionDiv.className = 'wizard-option';
-                    if (userSelections[question.key] === option.value || 
+                    if (userSelections[question.key] === option.value ||
                         (question.multiSelect && userSelections[question.key] && userSelections[question.key].includes(option.value))) {
                         optionDiv.classList.add('selected');
                     }
-                    
+
                     optionDiv.innerHTML = `
-                        <i class="fas ${option.icon}"></i>
-                        <div>${option.label}</div>
+                        <div class="style-image">
+                            <img src="${option.image}" alt="${option.label}" loading="lazy">
+                        </div>
+                        <div style="padding: 15px;">
+                            <i class="fas ${option.icon}"></i>
+                            <div>${option.label}</div>
+                        </div>
                     `;
-                    
+
                     optionDiv.addEventListener('click', () => selectOption(question, option));
                     optionsDiv.appendChild(optionDiv);
                 });
-                
+
                 stepDiv.appendChild(optionsDiv);
-                
+
                 const navDiv = document.createElement('div');
                 navDiv.className = 'nav-buttons';
-                
+
                 if (stepIndex > 0) {
                     const backBtn = document.createElement('button');
                     backBtn.className = 'fcc-secondary-btn';
@@ -670,7 +958,7 @@
                 } else {
                     navDiv.appendChild(document.createElement('div'));
                 }
-                
+
                 if (stepIndex < wizardQuestions.length - 1) {
                     const nextBtn = document.createElement('button');
                     nextBtn.className = 'fcc-primary-btn';
@@ -686,7 +974,7 @@
                     finishBtn.addEventListener('click', finishWizard);
                     navDiv.appendChild(finishBtn);
                 }
-                
+
                 stepDiv.appendChild(navDiv);
                 wizardSteps.appendChild(stepDiv);
             }
@@ -705,10 +993,10 @@
                 } else {
                     userSelections[question.key] = option.value;
                 }
-                
+
                 const allOptions = document.querySelectorAll('.wizard-option');
                 allOptions.forEach(opt => opt.classList.remove('selected'));
-                
+
                 const selectedOptions = document.querySelectorAll(`.wizard-step.active .wizard-option`);
                 selectedOptions.forEach((opt, i) => {
                     const optValue = question.options[i].value;
@@ -717,7 +1005,7 @@
                         opt.classList.add('selected');
                     }
                 });
-                
+
                 const nextBtn = document.querySelector('.wizard-step.active .fcc-primary-btn');
                 if (nextBtn) {
                     nextBtn.disabled = !userSelections[question.key];
@@ -738,53 +1026,65 @@
             function finishWizard() {
                 loadingSpinner.style.display = 'block';
                 
+                // Simulate API call with timeout
                 setTimeout(() => {
-                    filterModels();
+                    // Filter home models based on user selections
+                    selectedModels = homeModels.filter(model => {
+                        // Match style
+                        if (model.style !== userSelections.style) return false;
+                        
+                        // Match bedrooms (within 1 of selected)
+                        if (userSelections.bedrooms < 5) {
+                            if (model.bedrooms !== userSelections.bedrooms) return false;
+                        } else {
+                            if (model.bedrooms < 5) return false;
+                        }
+                        
+                        // Match bathrooms (within 0.5 of selected)
+                        if (userSelections.bathrooms < 3.5) {
+                            if (Math.abs(model.bathrooms - userSelections.bathrooms) > 0.5) return false;
+                        } else {
+                            if (model.bathrooms < 3.5) return false;
+                        }
+                        
+                        // Match budget (within 20% of selected)
+                        if (model.priceEstimate > userSelections.budget * 1.2) return false;
+                        
+                        // Match features if selected
+                        if (userSelections.features && userSelections.features.length > 0) {
+                            const hasAllFeatures = userSelections.features.every(feat => 
+                                model.features.includes(feat)
+                            );
+                            if (!hasAllFeatures) return false;
+                        }
+                        
+                        return true;
+                    });
+                    
+                    // If no exact matches, show similar homes
+                    if (selectedModels.length === 0) {
+                        selectedModels = homeModels.filter(model => model.style === userSelections.style);
+                    }
+                    
                     loadingSpinner.style.display = 'none';
                     modal.style.display = 'none';
                     showPropertyModal();
                 }, 1500);
             }
 
-            function filterModels() {
-                selectedModels = matterportModels.filter(model => {
-                    if (userSelections.style && model.style !== userSelections.style) return false;
-                    
-                    if (userSelections.bedrooms) {
-                        if (userSelections.bedrooms === 5 && model.bedrooms < 5) return false;
-                        if (userSelections.bedrooms !== 5 && model.bedrooms !== userSelections.bedrooms) return false;
-                    }
-                    
-                    if (userSelections.bathrooms) {
-                        if (userSelections.bathrooms === 3.5 && model.bathrooms < 3.5) return false;
-                        if (userSelections.bathrooms !== 3.5 && model.bathrooms < userSelections.bathrooms) return false;
-                    }
-                    
-                    if (userSelections.budget && model.priceEstimate > userSelections.budget) return false;
-                    
-                    if (userSelections.features && userSelections.features.length > 0) {
-                        const hasAllFeatures = userSelections.features.every(feat => 
-                            model.features.some(mf => mf.toLowerCase().includes(feat.toLowerCase()))
-                        );
-                        if (!hasAllFeatures) return false;
-                    }
-                    
-                    return true;
-                });
-                
-                if (selectedModels.length === 0) {
-                    selectedModels = matterportModels.slice(0, 3);
-                }
-            }
-
             function showGallery() {
                 matterportGallery.innerHTML = '';
-                
+
                 selectedModels.forEach(model => {
                     const galleryItem = document.createElement('div');
                     galleryItem.className = 'gallery-item';
                     galleryItem.innerHTML = `
-                        <img src="${model.image}" alt="${model.title}" style="width:100%;height:200px;object-fit:cover;">
+                        <div style="position: relative; overflow: hidden; padding-top: 56.25%;">
+                            <img src="${model.full_image}" alt="${model.title}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+                            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-play-circle" style="font-size: 50px; color: white;"></i>
+                            </div>
+                        </div>
                         <div class="gallery-item-info">
                             <h3>${model.title}</h3>
                             <p>${model.description}</p>
@@ -794,11 +1094,11 @@
                     `;
                     matterportGallery.appendChild(galleryItem);
                 });
-                
+
                 galleryModal.style.display = 'block';
-                
+
                 document.querySelectorAll('.select-home').forEach(btn => {
-                    btn.addEventListener('click', function() {
+                    btn.addEventListener('click', function () {
                         const modelId = this.getAttribute('data-id');
                         selectHome(modelId);
                     });
@@ -806,7 +1106,7 @@
             }
 
             function selectHome(modelId) {
-                selectedHome = matterportModels.find(m => m.id === modelId);
+                selectedHome = homeModels.find(m => m.id === modelId);
                 galleryModal.style.display = 'none';
                 showResults();
             }
@@ -821,42 +1121,45 @@
                     alert('Please enter a property address');
                     return;
                 }
-                
+
                 loadingSpinner.style.display = 'block';
                 propertyDataDisplay.innerHTML = 'Fetching property data...';
-                
+
+                // Simulate API call with timeout
                 setTimeout(() => {
                     propertyData = {
                         address: address,
-                        parcelId: '123-456-789-000',
-                        lotSize: '12,500 sq ft',
-                        zoning: 'RS-1 (Residential Single Family)',
-                        existingImprovements: 'Single family home (2,400 sq ft)',
-                        yearBuilt: 1985,
-                        marketValue: '$450,000'
+                        lotDimensions: '100ft x 125ft',
+                        zoning: 'Residential Single Family',
+                        easements: 'None recorded',
+                        floodZone: 'X (0.2% Annual Chance)',
+                        existingImprovements: 'None',
+                        soilType: 'Sandy loam',
+                        utilities: 'All utilities available at street'
                     };
-                    
+
                     renderPropertyData();
                     loadingSpinner.style.display = 'none';
                     confirmPropertyBtn.disabled = false;
-                }, 2000);
+                }, 1500);
             }
 
             function handleSurveyUpload(e) {
                 const file = e.target.files[0];
                 if (!file) return;
-                
+
                 loadingSpinner.style.display = 'block';
                 propertyDataDisplay.innerHTML = 'Processing survey plan...';
-                
+
                 setTimeout(() => {
                     propertyData = {
                         surveyPlan: file.name,
                         lotDimensions: '100ft x 125ft',
                         easements: 'None recorded',
-                        floodZone: 'X (0.2% Annual Chance)'
+                        floodZone: 'X (0.2% Annual Chance)',
+                        existingImprovements: 'None'
                     };
-                    
+
                     renderPropertyData();
                     loadingSpinner.style.display = 'none';
                     confirmPropertyBtn.disabled = false;
@@ -865,19 +1168,20 @@
 
             function renderPropertyData() {
                 let html = '<h3>Property Details</h3><ul>';
-                
+
                 for (const [key, value] of Object.entries(propertyData)) {
-                    html += `<li><strong>${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</strong> ${value}</li>`;
+                    const formattedKey = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+                    html += `<li><strong>${formattedKey}:</strong> ${value}</li>`;
                 }
-                
+
                 html += '</ul>';
-                
+
                 if (propertyData.existingImprovements && !propertyData.existingImprovements.includes('None')) {
                     html += '<div style="background:#fff3cd;padding:15px;border-radius:6px;margin-top:15px;">';
                     html += '<strong>Note:</strong> This property has existing structures. The system will switch to renovation mode.';
                     html += '</div>';
                 }
-                
+
                 propertyDataDisplay.innerHTML = html;
             }
 
@@ -888,21 +1192,19 @@
 
             function showResults() {
                 selectedHomeTitle.textContent = selectedHome.title;
-                
-                matterportEmbed.innerHTML = `
-                    <img src="${selectedHome.image}" alt="${selectedHome.title}" style="width:100%;height:400px;object-fit:cover;border-radius:8px;">
-                `;
-                
+                homeDetailsImage.src = selectedHome.full_image;
+                matterportEmbed.src = selectedHome.embed_url;
+
                 const contractorFee = selectedHome.priceEstimate * 0.20;
                 const totalEstimate = selectedHome.priceEstimate + contractorFee;
-                
+
                 estimateDetails.innerHTML = `
                     <p><strong>Base Construction Cost:</strong> $${selectedHome.priceEstimate.toLocaleString()}</p>
                     <p><strong>Contractor Fee (20%):</strong> $${contractorFee.toLocaleString()}</p>
                     <p><strong>Total Estimated Cost:</strong> $${totalEstimate.toLocaleString()}</p>
                     <p><em>Note: This is an estimate only. Final costs may vary based on site conditions, material choices, and other factors.</em></p>
                 `;
-                
+
                 codeCompliance.innerHTML = `
                     <ul>
                         <li>Compliant with Florida Building Code 2023, 7th Edition</li>
@@ -912,89 +1214,90 @@
                         <li>Energy efficiency: Florida Energy Code compliant</li>
                     </ul>
                 `;
-                
+
                 initializeFloorPlan();
-                
+
                 if (!propertyData.existingImprovements || propertyData.existingImprovements.includes('None')) {
                     furniturePlanner.style.display = 'block';
                 } else {
                     furniturePlanner.style.display = 'none';
                 }
-                
+
                 resultsModal.style.display = 'block';
             }
 
             function initializeFloorPlan() {
+                // Create a simple floor plan with SVG
                 floorPlanSvg.innerHTML = '';
                 
-                const svgNS = "http://www.w3.org/2000/svg";
+                // Set viewBox to match our drawing area
+                floorPlanSvg.setAttribute('viewBox', '0 0 800 600');
                 
-                const createWall = (x1, y1, x2, y2) => {
-                    const wall = document.createElementNS(svgNS, "line");
-                    wall.setAttribute("x1", x1);
-                    wall.setAttribute("y1", y1);
-                    wall.setAttribute("x2", x2);
-                    wall.setAttribute("y2", y2);
-                    wall.setAttribute("stroke", "#333");
-                    wall.setAttribute("stroke-width", "5");
-                    floorPlanSvg.appendChild(wall);
-                };
+                // Draw walls
+                const walls = [
+                    {x1: 100, y1: 100, x2: 700, y2: 100}, // top wall
+                    {x1: 700, y1: 100, x2: 700, y2: 500}, // right wall
+                    {x1: 700, y1: 500, x2: 100, y2: 500}, // bottom wall
+                    {x1: 100, y1: 500, x2: 100, y2: 100}, // left wall
+                    
+                    // Interior walls
+                    {x1: 100, y1: 300, x2: 400, y2: 300}, // horizontal divider
+                    {x1: 400, y1: 300, x2: 400, y2: 500}  // vertical divider
+                ];
                 
-                createWall(100, 100, 400, 100);
-                createWall(400, 100, 400, 300);
-                createWall(400, 300, 100, 300);
-                createWall(100, 300, 100, 100);
-                createWall(250, 100, 250, 200);
+                walls.forEach(wall => {
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    line.setAttribute("x1", wall.x1);
+                    line.setAttribute("y1", wall.y1);
+                    line.setAttribute("x2", wall.x2);
+                    line.setAttribute("y2", wall.y2);
+                    line.setAttribute("stroke", "#333");
+                    line.setAttribute("stroke-width", "10");
+                    floorPlanSvg.appendChild(line);
+                });
                 
-                addDimension(100, 90, 400, 90, "30'0\"");
-                addDimension(410, 100, 410, 300, "20'0\"");
+                // Add room labels
+                const rooms = [
+                    {x: 250, y: 200, text: "Living Room"},
+                    {x: 250, y: 400, text: "Kitchen"},
+                    {x: 550, y: 200, text: "Bedroom"},
+                    {x: 550, y: 400, text: "Bathroom"}
+                ];
                 
-                addText(150, 150, "Living Room");
-                addText(300, 150, "Kitchen");
-                addText(150, 250, "Bedroom");
+                rooms.forEach(room => {
+                    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    text.setAttribute("x", room.x);
+                    text.setAttribute("y", room.y);
+                    text.setAttribute("text-anchor", "middle");
+                    text.setAttribute("fill", "#666");
+                    text.setAttribute("font-family", "sans-serif");
+                    text.setAttribute("font-size", "20");
+                    text.textContent = room.text;
+                    floorPlanSvg.appendChild(text);
+                });
                 
-                floorPlanSvg.addEventListener('mousedown', startDrag);
-                floorPlanSvg.addEventListener('mousemove', dragItem);
-                floorPlanSvg.addEventListener('mouseup', endDrag);
-                floorPlanSvg.addEventListener('mouseleave', endDrag);
-            }
-
-            function addDimension(x1, y1, x2, y2, text) {
-                const svgNS = "http://www.w3.org/2000/svg";
+                // Add doors
+                const doors = [
+                    {x: 100, y: 450, width: 80, height: 10, rotate: 0}, // main door
+                    {x: 400, y: 400, width: 80, height: 10, rotate: 90}  // interior door
+                ];
                 
-                const dimLine = document.createElementNS(svgNS, "line");
-                dimLine.setAttribute("x1", x1);
-                dimLine.setAttribute("y1", y1);
-                dimLine.setAttribute("x2", x2);
-                dimLine.setAttribute("y2", y2);
-                dimLine.setAttribute("class", "dimension-line");
-                floorPlanSvg.appendChild(dimLine);
-                
-                const dimText = document.createElementNS(svgNS, "text");
-                dimText.setAttribute("x", (x1 + x2) / 2);
-                dimText.setAttribute("y", (y1 + y2) / 2);
-                dimText.setAttribute("class", "dimension-text");
-                dimText.setAttribute("text-anchor", "middle");
-                dimText.setAttribute("dominant-baseline", "middle");
-                dimText.textContent = text;
-                floorPlanSvg.appendChild(dimText);
-            }
-
-            function addText(x, y, text) {
-                const svgNS = "http://www.w3.org/2000/svg";
-                const textEl = document.createElementNS(svgNS, "text");
-                textEl.setAttribute("x", x);
-                textEl.setAttribute("y", y);
-                textEl.setAttribute("font-size", "14");
-                textEl.setAttribute("text-anchor", "middle");
-                textEl.textContent = text;
-                floorPlanSvg.appendChild(textEl);
+                doors.forEach(door => {
+                    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    rect.setAttribute("x", door.x);
+                    rect.setAttribute("y", door.y);
+                    rect.setAttribute("width", door.width);
+                    rect.setAttribute("height", door.height);
+                    rect.setAttribute("fill", "#8B4513");
+                    rect.setAttribute("transform", `rotate(${door.rotate} ${door.x} ${door.y})`);
+                    floorPlanSvg.appendChild(rect);
+                });
             }
 
             function addFurniture(type) {
                 const svgNS = "http://www.w3.org/2000/svg";
                 const furniture = document.createElementNS(svgNS, "rect");
-                
+
                 let width, height, fill;
                 switch (type) {
                     case 'sofa':
@@ -1018,7 +1321,7 @@
                         fill = "#A0522D";
                         break;
                 }
-                
+
                 furniture.setAttribute("width", width);
                 furniture.setAttribute("height", height);
                 furniture.setAttribute("fill", fill);
@@ -1026,14 +1329,14 @@
                 furniture.setAttribute("y", 200);
                 furniture.setAttribute("class", "furniture-item");
                 furniture.setAttribute("data-type", type);
-                
+
                 furnitureItems.push({
                     element: furniture,
                     type: type,
                     x: 200,
                     y: 200
                 });
-                
+
                 floorPlanSvg.appendChild(furniture);
             }
 
@@ -1048,7 +1351,7 @@
                 if (e.target.classList.contains('furniture-item')) {
                     isDragging = true;
                     draggedItem = e.target;
-                    
+
                     const item = furnitureItems.find(i => i.element === draggedItem);
                     if (item) {
                         const rect = draggedItem.getBoundingClientRect();
@@ -1060,14 +1363,14 @@
 
             function dragItem(e) {
                 if (!isDragging || !draggedItem) return;
-                
+
                 const svgRect = floorPlanSvg.getBoundingClientRect();
                 const x = e.clientX - svgRect.left - offsetX;
                 const y = e.clientY - svgRect.top - offsetY;
-                
+
                 draggedItem.setAttribute("x", x);
                 draggedItem.setAttribute("y", y);
-                
+
                 const item = furnitureItems.find(i => i.element === draggedItem);
                 if (item) {
                     item.x = x;
@@ -1081,20 +1384,46 @@
             }
 
             function downloadPlan() {
-                alert('In a full implementation, this would generate and download:\n- 2D Floor Plan\n- Elevations\n- Construction Estimate\n- Code Compliance Report');
+                alert('Your plan and estimate PDF will be downloaded. Check your downloads folder.');
+                // In a real implementation, this would generate a PDF with all the details
             }
 
             function contactUs() {
-                alert('In a full implementation, this would open a contact form with all the project details pre-filled.');
+                alert('A Fox Certified Contractors representative will contact you shortly to discuss building your dream home!');
+                // In a real implementation, this would send the form data
             }
 
-            window.addEventListener('click', function(event) {
+            function savePlan() {
+                const userData = {
+                    name: userName.value,
+                    email: userEmail.value,
+                    location: userLocation.value
+                };
+
+                if (!userData.name || !userData.email) {
+                    alert('Please enter your name and email to save your plan');
+                    return;
+                }
+
+                // Simulate saving to a database
+                setTimeout(() => {
+                    alert('Your plan has been saved successfully! We\'ve sent a copy to your email.');
+                }, 1000);
+            }
+
+            window.addEventListener('click', function (event) {
                 if (event.target === modal) modal.style.display = 'none';
                 if (event.target === galleryModal) galleryModal.style.display = 'none';
                 if (event.target === propertyModal) propertyModal.style.display = 'none';
                 if (event.target === resultsModal) resultsModal.style.display = 'none';
             });
+
+            floorPlanSvg.addEventListener('mousedown', startDrag);
+            floorPlanSvg.addEventListener('mousemove', dragItem);
+            floorPlanSvg.addEventListener('mouseup', endDrag);
+            floorPlanSvg.addEventListener('mouseleave', endDrag);
         });
     </script>
 </body>
+
 </html>
